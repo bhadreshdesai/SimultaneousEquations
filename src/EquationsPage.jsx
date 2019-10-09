@@ -6,13 +6,15 @@ import EquationCard from "./EquationCard";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
+import { TextField } from "@material-ui/core";
 
 class EquationsPage extends Component {
   constructor() {
     super();
-    this.state = { showAnswer: false, cards: null };
-    this.handleChange = this.handleChange.bind(this);
+    this.state = { noOfQuestions: 8, showAnswer: false, cards: null };
     this.handleClick = this.handleClick.bind(this);
+    this.handleNoOfQuestions = this.handleNoOfQuestions.bind(this);
+    this.handleShowAnswers = this.handleShowAnswers.bind(this);
   }
 
   getRandomInt(max) {
@@ -27,15 +29,10 @@ class EquationsPage extends Component {
     return Math.random() < 0.5 ? 1 : -1;
   }
 
-  handleChange() {
-    this.setState(prevState => {
-      return { showAnswer: !prevState.showAnswer };
-    });
-  }
-
   handleClick() {
     let arrCards = [];
-    for (let i = 0; i < 8; i++) {
+    const { noOfQuestions } = this.state;
+    for (let i = 0; i < noOfQuestions; i++) {
       const x = this.getRandomSign() * this.getRandomInt(10);
       const y = this.getRandomSign() * this.getRandomInt(10);
       const a = this.getRandomInt(10);
@@ -58,8 +55,18 @@ class EquationsPage extends Component {
     this.setState({ cards: arrCards });
   }
 
+  handleNoOfQuestions(value) {
+    this.setState({ noOfQuestions: value });
+  }
+
+  handleShowAnswers() {
+    this.setState(prevState => {
+      return { showAnswer: !prevState.showAnswer };
+    });
+  }
+
   render() {
-    const { showAnswer, cards } = this.state;
+    const { noOfQuestions, showAnswer, cards } = this.state;
     /*
     const cards = data.map(item => (
       <EquationCard key={item.id} item={item} showAnswer={showAnswer} />
@@ -80,19 +87,29 @@ class EquationsPage extends Component {
           Equations
         </Typography>
         <Grid container>
-          <Grid item xs={6}>
+          <Grid item xs={3}>
             <Button
               color="primary"
               onClick={this.handleClick}
               variant="contained"
             >
-              Generate Equations
+              Generate
             </Button>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item>
+            <TextField
+              label="# of questions"
+              value={noOfQuestions}
+              onChange={event => this.handleNoOfQuestions(event.target.value)}
+            />
+          </Grid>
+          <Grid item>
             <FormControlLabel
               control={
-                <Checkbox checked={showAnswer} onChange={this.handleChange} />
+                <Checkbox
+                  checked={showAnswer}
+                  onChange={this.handleShowAnswers}
+                />
               }
               label="Show Answers"
             />
