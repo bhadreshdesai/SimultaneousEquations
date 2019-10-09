@@ -1,2 +1,0 @@
-# SimultaneousEquations
-Created with CodeSandbox
